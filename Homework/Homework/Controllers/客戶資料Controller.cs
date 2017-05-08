@@ -18,7 +18,17 @@ namespace Homework.Controllers
         // GET: 客戶資料
         public ActionResult Index()
         {
+
             return View();
+            //try {
+            //    return View();
+            //}
+            //catch (NullReferenceException ex)
+            //{
+            //    string stra = ex.ToString();
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+           
         }
 
         // GET: 客戶資料/Details/5

@@ -68,26 +68,37 @@ namespace Homework.Controllers
             }
         }
 
-        // GET: 客戶銀行資訊/Delete/5
-        public ActionResult Delete(int id)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
-            return View();
+            客戶銀行資訊 CustomerBank = db.客戶銀行資訊.Find(id);
+            CustomerBank.刪除 = true;
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
-        // POST: 客戶銀行資訊/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //// GET: 客戶銀行資訊/Delete/5
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
+
+        //// POST: 客戶銀行資訊/Delete/5
+        //[HttpPost]
+        //public ActionResult Delete(int id, FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add delete logic here
+
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }
