@@ -14,7 +14,12 @@ namespace Homework.Controllers
         // GET: 客戶聯絡人
         public ActionResult Index()
         {
-            return View();
+            var dt = db.客戶聯絡人.
+                Where(p => p.刪除 == false).ToList();
+                //.OrderByDescending(p => p.ProductId).Take(10);
+
+            return View(dt);
+
         }
 
         // GET: 客戶聯絡人/Details/5
@@ -29,20 +34,38 @@ namespace Homework.Controllers
             return View();
         }
 
-        // POST: 客戶聯絡人/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
+        //// POST: 客戶聯絡人/Create
+        //[HttpPost]
+        //public ActionResult Create(FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add insert logic here
 
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
+
+        // POST: Products/Create
+        // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
+        // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "ProductId,ProductName,Price,Active,Stock")] 客戶聯絡人 product)
+        {
+            if (ModelState.IsValid)
+            {
+
+                db.客戶聯絡人.Add(product);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            return View(product);
         }
 
         // GET: 客戶聯絡人/Edit/5
