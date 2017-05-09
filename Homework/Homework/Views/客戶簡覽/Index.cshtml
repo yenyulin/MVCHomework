@@ -6,14 +6,9 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.客戶ID)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.客戶名稱)
         </th>
@@ -23,27 +18,21 @@
         <th>
             @Html.DisplayNameFor(model => model.聯絡人數量)
         </th>
-        <th></th>
+
     </tr>
 
 @foreach (var item in Model) {
     <tr>
+       
         <td>
-            @Html.DisplayFor(modelItem => item.客戶ID)
+            @Html.ActionLink( item.客戶名稱, "Index", "客戶資料" )
+            
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.客戶名稱)
+            @Html.ActionLink(item.銀行帳戶數量.ToString().Length==0?"0": item.銀行帳戶數量.ToString(), "Index", "客戶銀行資訊")
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.銀行帳戶數量)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.聯絡人數量)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.序號 }) |
-            @Html.ActionLink("Details", "Details", new { id=item.序號 }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.序號 })
+            @Html.ActionLink(item.聯絡人數量.ToString().Length == 0 ? "0" : item.聯絡人數量.ToString(), "Index", "客戶聯絡人")
         </td>
     </tr>
 }

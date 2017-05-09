@@ -17,7 +17,23 @@ namespace Homework.Controllers
         // GET: 客戶資料
         public ActionResult Index()
         {
-            return View(db.客戶資料.ToList());
+            var dt = db.客戶資料.
+            Where(p => p.刪除 == false).ToList();
+            //.OrderByDescending(p => p.ProductId).Take(10);
+            //return View(db.Product.Take(10));
+            return View(dt);
+            
+        }
+
+       // 對應 <form method="post"> 只接受 Post 請求
+        public ActionResult Query(string strKeywrod)
+        {
+            var dt = db.客戶資料.
+            Where(p => p.刪除 == false && ( p.Email.Contains(strKeywrod) | p.客戶名稱.Contains(strKeywrod) )).ToList();
+            //.OrderByDescending(p => p.ProductId).Take(10);
+            //return View(db.Product.Take(10));
+            return View(dt);
+
         }
 
         // GET: 客戶資料/Details/5
@@ -90,20 +106,20 @@ namespace Homework.Controllers
         }
 
 
-        //// GET: 客戶資料/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    客戶資料 客戶資料 = db.客戶資料.Find(id);
-        //    if (客戶資料 == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(客戶資料);
-        //}
+        // GET: 客戶資料/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            客戶資料 客戶資料 = db.客戶資料.Find(id);
+            if (客戶資料 == null)
+            {
+                return HttpNotFound();
+            }
+            return View(客戶資料);
+        }
 
         // POST: 客戶資料/Delete/5
         [HttpPost, ActionName("Delete")]

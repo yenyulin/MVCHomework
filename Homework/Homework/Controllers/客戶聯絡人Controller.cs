@@ -17,6 +17,7 @@ namespace Homework.Controllers
         // GET: 客戶聯絡人
         public ActionResult Index()
         {
+            //var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料.刪除==false).Where(p => p.刪除 == false);
             var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料);
             return View(客戶聯絡人.ToList());
         }

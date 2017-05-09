@@ -360,18 +360,6 @@
     <Content Include="Views\客戶聯絡人\Index.cshtml" />
     <Content Include="Views\客戶聯絡人\Create.cshtml" />
     <Content Include="Views\客戶聯絡人\Edit.cshtml" />
-    <Content Include="Views\客戶資料1\Create.cshtml" />
-    <Content Include="Views\客戶資料1\Delete.cshtml" />
-    <Content Include="Views\客戶資料1\Details.cshtml" />
-    <Content Include="Views\客戶資料1\Edit.cshtml" />
-    <Content Include="Views\客戶資料1\Index.cshtml" />
-    <Content Include="Views\客戶資料\Delete.cshtml" />
-    <Content Include="Views\客戶聯絡人\Delete.cshtml" />
-    <Content Include="Views\客戶銀行資訊\Delete.cshtml" />
-    <Content Include="Views\客戶簡覽\Create.cshtml" />
-    <Content Include="Views\客戶簡覽\Delete.cshtml" />
-    <Content Include="Views\客戶簡覽\Details.cshtml" />
-    <Content Include="Views\客戶簡覽\Edit.cshtml" />
     <Content Include="Views\客戶簡覽\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
