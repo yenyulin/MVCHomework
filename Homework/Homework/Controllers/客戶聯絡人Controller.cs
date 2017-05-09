@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Homework.Models;
@@ -14,112 +17,116 @@ namespace Homework.Controllers
         // GET: 客戶聯絡人
         public ActionResult Index()
         {
-            var dt = db.客戶聯絡人.
-                Where(p => p.刪除 == false).ToList();
-                //.OrderByDescending(p => p.ProductId).Take(10);
-
-            return View(dt);
-
+            var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料);
+            return View(客戶聯絡人.ToList());
         }
 
         // GET: 客戶聯絡人/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            if (客戶聯絡人 == null)
+            {
+                return HttpNotFound();
+            }
+            return View(客戶聯絡人);
         }
 
         // GET: 客戶聯絡人/Create
         public ActionResult Create()
         {
+            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱");
             return View();
         }
 
-        //// POST: 客戶聯絡人/Create
-        //[HttpPost]
-        //public ActionResult Create(FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        // POST: Products/Create
+        // POST: 客戶聯絡人/Create
         // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,ProductName,Price,Active,Stock")] 客戶聯絡人 product)
+        public ActionResult Create([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話,刪除")] 客戶聯絡人 客戶聯絡人)
         {
             if (ModelState.IsValid)
             {
-
-                db.客戶聯絡人.Add(product);
+                db.客戶聯絡人.Add(客戶聯絡人);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(product);
+            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            return View(客戶聯絡人);
         }
 
         // GET: 客戶聯絡人/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            if (客戶聯絡人 == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            return View(客戶聯絡人);
         }
 
         // POST: 客戶聯絡人/Edit/5
+        // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
+        // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話,刪除")] 客戶聯絡人 客戶聯絡人)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
+                db.Entry(客戶聯絡人).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            return View(客戶聯絡人);
         }
 
+        // GET: 客戶聯絡人/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            if (客戶聯絡人 == null)
+            {
+                return HttpNotFound();
+            }
+            return View(客戶聯絡人);
+        }
+
+        // POST: 客戶聯絡人/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            客戶聯絡人 CustomerContants = db.客戶聯絡人.Find(id);
-            CustomerContants.刪除 = true;
+            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            db.客戶聯絡人.Remove(客戶聯絡人);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        //// GET: 客戶聯絡人/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: 客戶聯絡人/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add delete logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

@@ -54,6 +54,8 @@
           <Property Name="電話" Type="nvarchar" MaxLength="50" />
           <Property Name="刪除" Type="bit" Nullable="false" />
         </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'D:\MVC\MVCHOMEWORK\HOMEWORK\HOMEWORK\APP_DATA\客戶資料.MDF.dbo.客戶簡覽' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
         <EntityType Name="客戶簡覽">
           <Key>
             
@@ -177,8 +179,8 @@
           <Property Name="序號" Type="Int64" annotation:StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="客戶ID" Type="Int32" Nullable="false" />
           <Property Name="客戶名稱" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="銀行帳戶數量" Type="Int32" />
-          <Property Name="聯絡人數量" Type="Int32" />
+          <Property Name="銀行帳戶數量" Type="Int32" Nullable="true" />
+          <Property Name="聯絡人數量" Type="Int32" Nullable="true" />
         </EntityType>
         <Association Name="FK_客戶銀行資訊_客戶資料">
           <End Role="客戶資料" Type="Self.客戶資料" Multiplicity="1" />

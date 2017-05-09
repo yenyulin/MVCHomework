@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Mvc;
 using Homework.Models;
 
-
 namespace Homework.Controllers
 {
     public class 客戶資料Controller : Controller
@@ -18,23 +17,22 @@ namespace Homework.Controllers
         // GET: 客戶資料
         public ActionResult Index()
         {
-
-            return View();
-            //try {
-            //    return View();
-            //}
-            //catch (NullReferenceException ex)
-            //{
-            //    string stra = ex.ToString();
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-           
+            return View(db.客戶資料.ToList());
         }
 
         // GET: 客戶資料/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            客戶資料 客戶資料 = db.客戶資料.Find(id);
+            if (客戶資料 == null)
+            {
+                return HttpNotFound();
+            }
+            return View(客戶資料);
         }
 
         // GET: 客戶資料/Create
@@ -44,44 +42,70 @@ namespace Homework.Controllers
         }
 
         // POST: 客戶資料/Create
+        // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
+        // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,客戶名稱,統一編號,電話,傳真,地址,Email,刪除")] 客戶資料 客戶資料)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
+                db.客戶資料.Add(客戶資料);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            return View(客戶資料);
         }
 
         // GET: 客戶資料/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            客戶資料 客戶資料 = db.客戶資料.Find(id);
+            if (客戶資料 == null)
+            {
+                return HttpNotFound();
+            }
+            return View(客戶資料);
         }
 
         // POST: 客戶資料/Edit/5
+        // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
+        // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,客戶名稱,統一編號,電話,傳真,地址,Email,刪除")] 客戶資料 客戶資料)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
+                db.Entry(客戶資料).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(客戶資料);
         }
 
 
+        //// GET: 客戶資料/Delete/5
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    客戶資料 客戶資料 = db.客戶資料.Find(id);
+        //    if (客戶資料 == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(客戶資料);
+        //}
+
+        // POST: 客戶資料/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -92,26 +116,13 @@ namespace Homework.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: 客戶資料/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: 客戶資料/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add delete logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
