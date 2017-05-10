@@ -15,10 +15,19 @@ namespace Homework.Controllers
         private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: 客戶銀行資訊
-        public ActionResult Index()
+        public ActionResult Index(string search = "")
         {
-            var 客戶銀行資訊 = db.客戶銀行資訊.Include(客 => 客.客戶資料);
-            return View(客戶銀行資訊.ToList());
+
+            var dt = db.客戶銀行資訊.Include(客 => 客.客戶資料).Where(p => p.刪除 == false);
+            if (search != null)
+            {
+                if (search.Length > 0)
+                {
+                    dt = db.客戶銀行資訊.Include(客 => 客.客戶資料)
+                    .Where(p => p.刪除 == false && (p.銀行名稱.Contains(search) | p.帳戶名稱.Contains(search) | p.銀行名稱.Contains(search)));
+                }
+            }
+            return View(dt.ToList());
         }
 
         // GET: 客戶銀行資訊/Details/5

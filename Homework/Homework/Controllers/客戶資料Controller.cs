@@ -15,25 +15,20 @@ namespace Homework.Controllers
         private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: 客戶資料
-        public ActionResult Index()
+        public ActionResult Index(string search="")
         {
-            var dt = db.客戶資料.
-            Where(p => p.刪除 == false).ToList();
+            var dt = db.客戶資料.Where(p => p.刪除 == false);
+            if (search != null)
+            {
+                if (search.Length > 0)
+                {
+                    dt = db.客戶資料.
+                    Where(p => p.刪除 == false && (p.Email.Contains(search) | p.客戶名稱.Contains(search)));
+                }
+            }          
             //.OrderByDescending(p => p.ProductId).Take(10);
             //return View(db.Product.Take(10));
-            return View(dt);
-            
-        }
-
-       // 對應 <form method="post"> 只接受 Post 請求
-        public ActionResult Query(string strKeywrod)
-        {
-            var dt = db.客戶資料.
-            Where(p => p.刪除 == false && ( p.Email.Contains(strKeywrod) | p.客戶名稱.Contains(strKeywrod) )).ToList();
-            //.OrderByDescending(p => p.ProductId).Take(10);
-            //return View(db.Product.Take(10));
-            return View(dt);
-
+            return View(dt.ToList());            
         }
 
         // GET: 客戶資料/Details/5

@@ -5,7 +5,11 @@
 }
 
 <h2>Index</h2>
-
+<form method="get" action="@Url.Action("Index", "客戶簡覽")">
+    <label for="search">Search</label>
+    <input type="text" name="search" id="search" />
+    <button type="submit">Perform search</button>
+</form>
 
 <table class="table">
     <tr>

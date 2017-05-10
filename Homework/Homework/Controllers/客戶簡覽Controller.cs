@@ -15,9 +15,21 @@ namespace Homework.Controllers
         private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: 客戶簡覽
-        public ActionResult Index()
+        public ActionResult Index(string search = "")
         {
-            return View(db.客戶簡覽.ToList());
+            var dt = db.客戶簡覽.AsQueryable();
+            
+            if (search != null)
+            {
+                if (search.Length > 0)
+                {
+                    dt = db.客戶簡覽.Where(p => p.客戶名稱.Contains(search));
+                }
+            }
+            //.OrderByDescending(p => p.ProductId).Take(10);
+            //return View(db.Product.Take(10));
+            return View(dt.ToList());
+            
         }
 
         // GET: 客戶簡覽/Details/5

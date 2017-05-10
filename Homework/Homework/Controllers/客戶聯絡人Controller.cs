@@ -15,11 +15,20 @@ namespace Homework.Controllers
         private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: 客戶聯絡人
-        public ActionResult Index()
+        public ActionResult Index(string search = "")
         {
-            //var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料.刪除==false).Where(p => p.刪除 == false);
-            var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料);
-            return View(客戶聯絡人.ToList());
+
+            var dt = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(p => p.刪除 == false);
+            if (search != null)
+            {
+                if (search.Length > 0)
+                {
+                    dt = db.客戶聯絡人.Include(客 => 客.客戶資料)
+                    .Where(p => p.刪除 == false && (p.職稱.Contains(search) | p.姓名.Contains(search) | p.Email.Contains(search)));
+                }
+            }
+            return View(dt.ToList());
+
         }
 
         // GET: 客戶聯絡人/Details/5
