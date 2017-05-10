@@ -5,8 +5,24 @@ namespace Homework.Models
     using System.ComponentModel.DataAnnotations;
     
     [MetadataType(typeof(客戶資料MetaData))]
-    public partial class 客戶資料
+    public partial class 客戶資料: IValidatableObject
     {
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            //if (this.Price > 100 && this.Stock > 5)
+            //{
+            //    yield return new ValidationResult("價格與庫存數量不合理",
+            //        new string[] { "Price", "Stock" });
+            //}
+
+            //if (this.OrderLine.Count() > 2 && this.Stock == 0)
+            //{
+            //    yield return new ValidationResult("Stock 與訂單數量不匹配",
+            //        new string[] { "Stock" });
+            //}
+
+            yield break;
+        }
     }
     
     public partial class 客戶資料MetaData
