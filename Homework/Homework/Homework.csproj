@@ -221,6 +221,8 @@
     <Compile Include="Models\sysdiagrams.Partial.cs">
       <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ValidationAttributes\CheckCellPhoneAttribute.cs" />
+    <Compile Include="Models\ValidationAttributes\CheckEmailAttribute.cs" />
     <Compile Include="Models\客戶簡覽.cs">
       <DependentUpon>客戶資料Entities.tt</DependentUpon>
     </Compile>
@@ -373,9 +375,7 @@
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\ValidationAttributes\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

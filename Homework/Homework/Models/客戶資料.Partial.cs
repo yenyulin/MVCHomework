@@ -3,7 +3,8 @@ namespace Homework.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    
+    using ValidationAttributes;
+
     [MetadataType(typeof(客戶資料MetaData))]
     public partial class 客戶資料: IValidatableObject
     {
@@ -47,7 +48,9 @@ namespace Homework.Models
         
         [StringLength(100, ErrorMessage="欄位長度不得大於 100 個字元")]
         public string 地址 { get; set; }
-        
+
+        [DataType(DataType.EmailAddress)]
+        [RegularExpression(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", ErrorMessage = "Invalid email")]
         [StringLength(250, ErrorMessage="欄位長度不得大於 250 個字元")]
         public string Email { get; set; }
         [Required]

@@ -60,15 +60,45 @@ namespace Homework.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話,刪除")] 客戶聯絡人 客戶聯絡人)
         {
-            if (ModelState.IsValid)
-            {
-                db.客戶聯絡人.Add(客戶聯絡人);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            客戶聯絡人 email = db.客戶聯絡人.FirstOrDefault(u => u.Email.ToLower() == 客戶聯絡人.Email.ToLower() && u.客戶Id== 客戶聯絡人.客戶Id);
+            //try
+            //{
+                // Check if email already exists
+                if (email == null)
+                {
+                    db.客戶聯絡人.Add(客戶聯絡人);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("Email", "Email address already exists. Please enter a different email address.");
+                    ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+                    return View(客戶聯絡人);
+                }
+            //}
+            //catch (MembershipCreateUserException e)
+            //{
+            //    ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            //    return View(客戶聯絡人);
+            //    ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
+            //}
 
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
-            return View(客戶聯絡人);
+
+            // If we got this far, something failed, redisplay form
+            //return View(model);
+
+            //if (ModelState.IsValid)
+            //{
+            //    //db email = db.客戶聯絡人.FirstOrDefault(u => u.Email.ToLower() == 客戶聯絡人.Email.ToLower());
+
+            //    db.客戶聯絡人.Add(客戶聯絡人);
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+
+            //ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            //return View(客戶聯絡人);
         }
 
         // GET: 客戶聯絡人/Edit/5
@@ -94,12 +124,31 @@ namespace Homework.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話,刪除")] 客戶聯絡人 客戶聯絡人)
         {
+            //if (ModelState.IsValid)
+            //{
+            //    db.Entry(客戶聯絡人).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+            //ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            //return View(客戶聯絡人);
+
             if (ModelState.IsValid)
             {
-                db.Entry(客戶聯絡人).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                客戶聯絡人 email = db.客戶聯絡人.FirstOrDefault(u => u.Id != 客戶聯絡人.Id && u.客戶Id == 客戶聯絡人.客戶Id && u.Email.ToLower() == 客戶聯絡人.Email.ToLower()  );
+                if (email == null)
+                {
+                    db.Entry(客戶聯絡人).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("Email", "Email address already exists. Please enter a different email address.");
+
+                }
             }
+            
             ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }
