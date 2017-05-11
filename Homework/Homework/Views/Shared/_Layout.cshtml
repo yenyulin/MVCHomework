@@ -19,13 +19,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Homework", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Homework", "Index", "客戶簡覽", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
-                    <li>@Html.ActionLink("關於", "About", "Home")</li>
-                    <li>@Html.ActionLink("連絡方式", "Contact", "Home")</li>
+                    @*<li>@Html.ActionLink("首頁", "Index", "客戶簡覽")</li>
+    <li>@Html.ActionLink("關於", "About", "Home")</li>
+    <li>@Html.ActionLink("連絡方式", "Contact", "Home")</li>*@
 
 
                     <li>@Html.ActionLink("客戶資料", "Index", "客戶資料")</li>
