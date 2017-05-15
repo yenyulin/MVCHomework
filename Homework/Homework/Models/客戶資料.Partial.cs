@@ -55,7 +55,9 @@ namespace Homework.Models
         public string Email { get; set; }
         [Required]
         public bool 刪除 { get; set; }
-    
+
+        public int 客戶類別ID { get; set; }
+
         public virtual ICollection<客戶銀行資訊> 客戶銀行資訊 { get; set; }
         public virtual ICollection<客戶聯絡人> 客戶聯絡人 { get; set; }
     }
