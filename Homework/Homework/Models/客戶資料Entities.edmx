@@ -57,9 +57,9 @@
         </EntityType>
         <EntityType Name="客戶類別">
           <Key>
-            <PropertyRef Name="CustomerTypeID" />
+            <PropertyRef Name="客戶類別ID" />
           </Key>
-          <Property Name="CustomerTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="客戶類別ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CustomerType" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <!--產生期間發現錯誤:
@@ -234,9 +234,9 @@
         </EntityContainer>
         <EntityType Name="客戶類別">
           <Key>
-            <PropertyRef Name="CustomerTypeID" />
+            <PropertyRef Name="客戶類別ID" />
           </Key>
-          <Property Name="CustomerTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="客戶類別ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" />
           <Property Name="CustomerType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
@@ -313,8 +313,8 @@
           <EntitySetMapping Name="客戶類別">
             <EntityTypeMapping TypeName="客戶資料Model.客戶類別">
               <MappingFragment StoreEntitySet="客戶類別">
+                <ScalarProperty Name="客戶類別ID" ColumnName="客戶類別ID" />
                 <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
-                <ScalarProperty Name="CustomerTypeID" ColumnName="CustomerTypeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

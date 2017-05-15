@@ -14,7 +14,7 @@ namespace Homework.Models
     
     public partial class 客戶類別
     {
-        public int CustomerTypeID { get; set; }
+        public int 客戶類別ID { get; set; }
         public string CustomerType { get; set; }
     }
 }
