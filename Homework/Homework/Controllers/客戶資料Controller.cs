@@ -10,26 +10,26 @@ using Homework.Models;
 
 namespace Homework.Controllers
 {
-    public class 客戶資料Controller : Controller
+    public class 客戶資料Controller : BaseController
     {
-        private 客戶資料Entities db = new 客戶資料Entities();
+        //private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: 客戶資料
-        public ActionResult Index(string search="")
+        public ActionResult Index(ListCustomerQueryVM searchCondition)
         {
-            var dt = db.客戶資料.Where(p => p.刪除 == false);
-            if (search != null)
+            ViewBag.客戶類別ID = new SelectList(db.客戶類別, "客戶類別ID", "CustomerType");
+
+            var data = repo.GetCustomerByActive();
+            if (searchCondition.strKeyword != null)
             {
-                if (search.Length > 0)
-                {
-                    dt = db.客戶資料.
-                    Where(p => p.刪除 == false && (p.Email.Contains(search) | p.客戶名稱.Contains(search)));
-                }
-            }          
-            //.OrderByDescending(p => p.ProductId).Take(10);
-            //return View(db.Product.Take(10));
-            return View(dt.ToList());            
+                data = repo.GetIndexListByKeywordAndType(searchCondition.strKeyword, searchCondition.客戶類別ID);
+            }
+          
+            ViewData.Model = data.ToList();
+            return View();
         }
+
+     
 
         // GET: 客戶資料/Details/5
         public ActionResult Details(int? id)
@@ -38,7 +38,7 @@ namespace Homework.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶資料 客戶資料 = db.客戶資料.Find(id);
+            客戶資料 客戶資料 = repo.GetByID(id.Value);
             if (客戶資料 == null)
             {
                 return HttpNotFound();
@@ -49,6 +49,7 @@ namespace Homework.Controllers
         // GET: 客戶資料/Create
         public ActionResult Create()
         {
+            ViewBag.客戶類別ID = new SelectList(db.客戶類別, "客戶類別ID", "CustomerType");
             return View();
         }
 
@@ -57,7 +58,7 @@ namespace Homework.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,客戶名稱,統一編號,電話,傳真,地址,Email,刪除")] 客戶資料 客戶資料)
+        public ActionResult Create([Bind(Include = "Id,客戶名稱,統一編號,電話,傳真,地址,Email,刪除,客戶類別ID")] 客戶資料 客戶資料)
         {
             if (ModelState.IsValid)
             {
@@ -66,6 +67,7 @@ namespace Homework.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.客戶類別ID = new SelectList(db.客戶類別, "客戶類別ID", "CustomerType", 客戶資料.客戶類別ID);
             return View(客戶資料);
         }
 
@@ -81,6 +83,7 @@ namespace Homework.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.客戶類別ID = new SelectList(db.客戶類別, "客戶類別ID", "CustomerType", 客戶資料.客戶類別ID);
             return View(客戶資料);
         }
 
@@ -89,7 +92,7 @@ namespace Homework.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,客戶名稱,統一編號,電話,傳真,地址,Email,刪除")] 客戶資料 客戶資料)
+        public ActionResult Edit([Bind(Include = "Id,客戶名稱,統一編號,電話,傳真,地址,Email,刪除,客戶類別ID")] 客戶資料 客戶資料)
         {
             if (ModelState.IsValid)
             {
@@ -97,9 +100,9 @@ namespace Homework.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.客戶類別ID = new SelectList(db.客戶類別, "客戶類別ID", "CustomerType", 客戶資料.客戶類別ID);
             return View(客戶資料);
         }
-
 
         // GET: 客戶資料/Delete/5
         public ActionResult Delete(int? id)
@@ -121,8 +124,8 @@ namespace Homework.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            客戶資料 CustomerData = db.客戶資料.Find(id);
-            CustomerData.刪除 = true;
+            客戶資料 客戶資料 = db.客戶資料.Find(id);
+            db.客戶資料.Remove(客戶資料);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

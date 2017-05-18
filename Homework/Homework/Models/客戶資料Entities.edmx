@@ -76,6 +76,18 @@
           <Property Name="銀行帳戶數量" Type="int" />
           <Property Name="聯絡人數量" Type="int" />
         </EntityType>
+        <Association Name="FK_客戶資料_客戶類別">
+          <End Role="客戶類別" Type="Self.客戶類別" Multiplicity="1" />
+          <End Role="客戶資料" Type="Self.客戶資料" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="客戶類別">
+              <PropertyRef Name="客戶類別ID" />
+            </Principal>
+            <Dependent Role="客戶資料">
+              <PropertyRef Name="客戶類別ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_客戶銀行資訊_客戶資料">
           <End Role="客戶資料" Type="Self.客戶資料" Multiplicity="1" />
           <End Role="客戶銀行資訊" Type="Self.客戶銀行資訊" Multiplicity="*" />
@@ -115,6 +127,10 @@
     [客戶簡覽].[聯絡人數量] AS [聯絡人數量]
     FROM [dbo].[客戶簡覽] AS [客戶簡覽]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_客戶資料_客戶類別" Association="Self.FK_客戶資料_客戶類別">
+            <End Role="客戶類別" EntitySet="客戶類別" />
+            <End Role="客戶資料" EntitySet="客戶資料" />
+          </AssociationSet>
           <AssociationSet Name="FK_客戶銀行資訊_客戶資料" Association="Self.FK_客戶銀行資訊_客戶資料">
             <End Role="客戶資料" EntitySet="客戶資料" />
             <End Role="客戶銀行資訊" EntitySet="客戶銀行資訊" />
@@ -153,6 +169,7 @@
           <NavigationProperty Name="客戶銀行資訊" Relationship="Self.FK_客戶銀行資訊_客戶資料" FromRole="客戶資料" ToRole="客戶銀行資訊" />
           <NavigationProperty Name="客戶聯絡人" Relationship="Self.FK_客戶聯絡人_客戶資料" FromRole="客戶資料" ToRole="客戶聯絡人" />
           <Property Name="客戶類別ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="客戶類別" Relationship="客戶資料Model.FK_客戶資料_客戶類別" FromRole="客戶資料" ToRole="客戶類別" />
         </EntityType>
         <EntityType Name="客戶銀行資訊">
           <Key>
@@ -231,6 +248,10 @@
             <End Role="客戶聯絡人" EntitySet="客戶聯絡人" />
           </AssociationSet>
           <EntitySet Name="客戶類別" EntityType="客戶資料Model.客戶類別" />
+          <AssociationSet Name="FK_客戶資料_客戶類別" Association="客戶資料Model.FK_客戶資料_客戶類別">
+            <End Role="客戶類別" EntitySet="客戶類別" />
+            <End Role="客戶資料" EntitySet="客戶資料" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="客戶類別">
           <Key>
@@ -238,7 +259,20 @@
           </Key>
           <Property Name="客戶類別ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" />
           <Property Name="CustomerType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="客戶資料" Relationship="客戶資料Model.FK_客戶資料_客戶類別" FromRole="客戶類別" ToRole="客戶資料" />
         </EntityType>
+        <Association Name="FK_客戶資料_客戶類別">
+          <End Type="客戶資料Model.客戶類別" Role="客戶類別" Multiplicity="1" />
+          <End Type="客戶資料Model.客戶資料" Role="客戶資料" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="客戶類別">
+              <PropertyRef Name="客戶類別ID" />
+            </Principal>
+            <Dependent Role="客戶資料">
+              <PropertyRef Name="客戶類別ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

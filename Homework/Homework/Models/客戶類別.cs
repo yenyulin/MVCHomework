@@ -14,7 +14,16 @@ namespace Homework.Models
     
     public partial class 客戶類別
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public 客戶類別()
+        {
+            this.客戶資料 = new HashSet<客戶資料>();
+        }
+    
         public int 客戶類別ID { get; set; }
         public string CustomerType { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<客戶資料> 客戶資料 { get; set; }
     }
 }
