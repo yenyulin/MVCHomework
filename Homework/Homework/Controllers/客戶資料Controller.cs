@@ -7,27 +7,47 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Homework.Models;
+using PagedList;
 
 namespace Homework.Controllers
 {
+
+
     public class 客戶資料Controller : BaseController
     {
+        private const int DefaultPageSize = 1;
         //private 客戶資料Entities db = new 客戶資料Entities();
 
-        // GET: 客戶資料
-        public ActionResult Index(ListCustomerQueryVM searchCondition)
+        public ActionResult Index(int? page, ListCustomerQueryVM searchCondition)
         {
+            int currentPageIndex = page.HasValue ? page.Value  : 1;
+            
             ViewBag.客戶類別ID = new SelectList(db.客戶類別, "客戶類別ID", "CustomerType");
 
             var data = repo.GetCustomerByActive();
             if (searchCondition.strKeyword != null)
             {
-                data = repo.GetIndexListByKeywordAndType(searchCondition.strKeyword, searchCondition.客戶類別ID);
+                data = repo.GetIndexListByKeywordAndType(searchCondition.strKeyword, searchCondition.客戶類別ID).OrderByDescending(p => p.Id);
             }
-          
-            ViewData.Model = data.ToList();
+           
+            ViewData.Model = data.ToList().ToPagedList(currentPageIndex, DefaultPageSize);
             return View();
         }
+
+        // GET: 客戶資料
+        //public ActionResult Index(ListCustomerQueryVM searchCondition)
+        //{
+        //    ViewBag.客戶類別ID = new SelectList(db.客戶類別, "客戶類別ID", "CustomerType");
+
+        //    var data = repo.GetCustomerByActive();
+        //    if (searchCondition.strKeyword != null)
+        //    {
+        //        data = repo.GetIndexListByKeywordAndType(searchCondition.strKeyword, searchCondition.客戶類別ID);
+        //    }
+          
+        //    ViewData.Model = data.ToList();
+        //    return View();
+        //}
 
      
 

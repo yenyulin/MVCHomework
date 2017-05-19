@@ -8,6 +8,9 @@ namespace Homework.Models
 {   
 	public  class 客戶資料Repository : EFRepository<客戶資料>, I客戶資料Repository
 	{
+
+        private const int DefaultPageSize = 5;
+
         public override IQueryable<客戶資料> All()
         {
             return base.All().Where(p => !p.刪除).Include(客 => 客.客戶類別);
