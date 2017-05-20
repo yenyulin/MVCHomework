@@ -60,5 +60,8 @@ namespace Homework.Models
 
         public virtual ICollection<客戶銀行資訊> 客戶銀行資訊 { get; set; }
         public virtual ICollection<客戶聯絡人> 客戶聯絡人 { get; set; }
+
+        public string 帳號 { get; set; }
+        public string 密碼 { get; set; }
     }
 }

@@ -12,18 +12,26 @@ namespace Homework.Controllers
 {
     public class 客戶聯絡人Controller : Controller
     {
-        private 客戶資料Entities db = new 客戶資料Entities();
+        //private 客戶資料Entities db = new 客戶資料Entities();
+
+        客戶聯絡人Repository repo = RepositoryHelper.Get客戶聯絡人Repository();// new 客戶聯絡人Repository();
+        客戶資料Repository 客戶資料repo;
+
+        public 客戶聯絡人Controller()
+        {
+            客戶資料repo = RepositoryHelper.Get客戶資料Repository(repo.UnitOfWork);
+        }
 
         // GET: 客戶聯絡人
         public ActionResult Index(string search = "")
         {
 
-            var dt = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(p => p.刪除 == false);
+            var dt = repo.All().Include(客 => 客.客戶資料).Where(p => p.刪除 == false);
             if (search != null)
             {
                 if (search.Length > 0)
                 {
-                    dt = db.客戶聯絡人.Include(客 => 客.客戶資料)
+                    dt = repo.All().Include(客 => 客.客戶資料)
                     .Where(p => p.刪除 == false && (p.職稱.Contains(search) | p.姓名.Contains(search) | p.Email.Contains(search)));
                 }
             }
@@ -38,7 +46,8 @@ namespace Homework.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+
+            客戶聯絡人 客戶聯絡人 = repo.GetByID(id.Value);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
@@ -49,7 +58,7 @@ namespace Homework.Controllers
         // GET: 客戶聯絡人/Create
         public ActionResult Create()
         {
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱");
+            ViewBag.客戶Id = new SelectList(客戶資料repo.All(), "Id", "客戶名稱");
             return View();
         }
 
@@ -60,20 +69,21 @@ namespace Homework.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話,刪除")] 客戶聯絡人 客戶聯絡人)
         {
-            客戶聯絡人 email = db.客戶聯絡人.FirstOrDefault(u => u.Email.ToLower() == 客戶聯絡人.Email.ToLower() && u.客戶Id== 客戶聯絡人.客戶Id);
+            客戶聯絡人 email = repo.All().FirstOrDefault(u => u.Email.ToLower() == 客戶聯絡人.Email.ToLower() && u.客戶Id== 客戶聯絡人.客戶Id);
             //try
             //{
                 // Check if email already exists
                 if (email == null)
                 {
-                    db.客戶聯絡人.Add(客戶聯絡人);
-                    db.SaveChanges();
+                    repo.Add(客戶聯絡人);
+                    repo.UnitOfWork.Commit();
+                    //db.SaveChanges();
                     return RedirectToAction("Index");
                 }
                 else
                 {
                     ModelState.AddModelError("Email", "Email address already exists. Please enter a different email address.");
-                    ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+                    ViewBag.客戶Id = new SelectList(客戶資料repo.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
                     return View(客戶聯絡人);
                 }
             //}
@@ -108,12 +118,12 @@ namespace Homework.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = repo.GetByID(id.Value);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            ViewBag.客戶Id = new SelectList(客戶資料repo.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }
 
@@ -122,34 +132,21 @@ namespace Homework.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話,刪除")] 客戶聯絡人 客戶聯絡人)
+        //public ActionResult Edit([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話,刪除")] 客戶聯絡人 客戶聯絡人)
+        public ActionResult Edit(int id, FormCollection form)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    db.Entry(客戶聯絡人).State = EntityState.Modified;
-            //    db.SaveChanges();
-            //    return RedirectToAction("Index");
-            //}
-            //ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
-            //return View(客戶聯絡人);
-
-            if (ModelState.IsValid)
+            var 客戶聯絡人 = repo.GetByID(id);
+            if (客戶聯絡人 == null)
             {
-                客戶聯絡人 email = db.客戶聯絡人.FirstOrDefault(u => u.Id != 客戶聯絡人.Id && u.客戶Id == 客戶聯絡人.客戶Id && u.Email.ToLower() == 客戶聯絡人.Email.ToLower()  );
-                if (email == null)
-                {
-                    db.Entry(客戶聯絡人).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    ModelState.AddModelError("Email", "Email address already exists. Please enter a different email address.");
-
-                }
+                return HttpNotFound();
+            }
+            if (TryUpdateModel<客戶聯絡人>(客戶聯絡人))
+            {
+                repo.UnitOfWork.Commit();
+                return RedirectToAction("Index");
             }
             
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            ViewBag.客戶Id = new SelectList(客戶資料repo.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }
 
@@ -160,7 +157,7 @@ namespace Homework.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = repo.GetByID(id.Value);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
@@ -173,9 +170,9 @@ namespace Homework.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
-            db.客戶聯絡人.Remove(客戶聯絡人);
-            db.SaveChanges();
+            客戶聯絡人 客戶聯絡人 = repo.GetByID(id);
+            repo.Delete(客戶聯絡人);
+            repo.UnitOfWork.Commit();
             return RedirectToAction("Index");
         }
 
@@ -183,7 +180,10 @@ namespace Homework.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                repo.UnitOfWork.Context.Dispose();
+                //不用做兩次 因為unitofwork是共用的
+                //客戶資料repo.UnitOfWork.Context.Dispose();
+                //db.Dispose();
             }
             base.Dispose(disposing);
         }

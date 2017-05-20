@@ -30,6 +30,8 @@ namespace Homework.Models
         public string Email { get; set; }
         public bool 刪除 { get; set; }
         public int 客戶類別ID { get; set; }
+        public string 帳號 { get; set; }
+        public string 密碼 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<客戶銀行資訊> 客戶銀行資訊 { get; set; }
