@@ -35,9 +35,13 @@ namespace Homework.Controllers
             //ViewBag.客戶類別ID = new SelectList(db.客戶類別, "客戶類別ID", "CustomerType", 客戶資料.客戶類別ID);
 
             var data = repo.GetCustomerByActive();
-            if (searchCondition.strKeyword != null)
+            if (searchCondition.strKeyword != null | searchCondition.客戶類別ID !=0)
             {
-                data = repo.GetIndexListByKeywordAndType(searchCondition.strKeyword, searchCondition.客戶類別ID).OrderByDescending(p => p.Id);
+                if (searchCondition.strKeyword == null)
+                {
+                    searchCondition.strKeyword = "";
+                }
+                    data = repo.GetIndexListByKeywordAndType(searchCondition.strKeyword, searchCondition.客戶類別ID).OrderByDescending(p => p.Id);
             }
            
             ViewData.Model = data.ToList().ToPagedList(currentPageIndex, DefaultPageSize);

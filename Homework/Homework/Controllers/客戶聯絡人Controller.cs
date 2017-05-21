@@ -23,7 +23,7 @@ namespace Homework.Controllers
         }
 
         // GET: 客戶聯絡人
-        public ActionResult Index(string search = "")
+        public ActionResult Index( string sort , bool? desc, string search = "")
         {
 
             var dt = repo.All().Include(客 => 客.客戶資料).Where(p => p.刪除 == false);
@@ -34,6 +34,34 @@ namespace Homework.Controllers
                     dt = repo.All().Include(客 => 客.客戶資料)
                     .Where(p => p.刪除 == false && (p.職稱.Contains(search) | p.姓名.Contains(search) | p.Email.Contains(search)));
                 }
+            }
+            if (sort != null)
+            {
+                switch (sort)
+                {
+                    case "職稱":
+                        if (desc.HasValue && desc.Value)
+                        {
+                            dt = dt.OrderByDescending(m => m.職稱);
+                        }
+                        else
+                        {
+                            dt = dt.OrderBy(m => m.職稱);
+                        }
+                       
+                        break;
+                    case "姓名":
+                        if (desc.HasValue && desc.Value)
+                        {
+                            dt = dt.OrderByDescending(m => m.姓名);
+                        }
+                        else
+                        {
+                            dt = dt.OrderBy(m => m.姓名);
+                        }
+                        break;
+                }
+                   
             }
             return View(dt.ToList());
 
